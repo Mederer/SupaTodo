@@ -7,9 +7,12 @@ namespace SupaTodo.Services
     public class TodoService : ITodoService
     {
         private readonly SupaTodoContext _context;
-        public TodoService(SupaTodoContext context)
+        private readonly ILogger<TodoService> _logger;
+
+        public TodoService(SupaTodoContext context, ILogger<TodoService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public Todo Create(CreateTodoRequest request)
@@ -17,6 +20,9 @@ namespace SupaTodo.Services
             var todo = new Todo(request.Title, request.CompleteBy);
             _context.Add(todo);
             _context.SaveChanges();
+
+            _logger.LogInformation("Todo created. ID: {}", todo.Id);
+
             return todo;
         }
 
@@ -30,6 +36,9 @@ namespace SupaTodo.Services
 
             _context.Remove(todo);
             _context.SaveChanges();
+
+            _logger.LogInformation("Todo deleted. ID: {}", id);
+
             return true;
         }
 
@@ -40,7 +49,12 @@ namespace SupaTodo.Services
 
         public Todo? GetById(Guid id)
         {
-            return _context.Todos.Find(id);
+            var todo =  _context.Todos.Find(id);
+            if (todo is null)
+            {
+                _logger.LogInformation("Attemped to fetch non-existant Todo. ID: {}", id);
+            }
+            return todo;
         }
 
         public Todo? Update(UpdateTodoRequest request)
@@ -48,6 +62,7 @@ namespace SupaTodo.Services
             var todo = _context.Todos.Find(request.Id);
             if (todo is null)
             {
+                _logger.LogInformation("Attempted to update non-existant Todo. ID: {}", request.Id);
                 return null;
             }
 
@@ -65,6 +80,7 @@ namespace SupaTodo.Services
             }
 
             _context.SaveChanges();
+            _logger.LogInformation("Todo updated. ID: {}", todo.Id);
 
             return todo;
         }
