@@ -107,7 +107,7 @@ public class TodoServiceTests
   [Fact]
   void GetTodo_ShouldReturnNull_WhenTodoDoesNotExist()
   {
-    _todoRepositoryMock.Setup(x => x.FindById(It.IsAny<Guid>())).Returns<Guid>(_ => null);
+    _todoRepositoryMock.Setup(x => x.FindById(It.IsAny<Guid>())).Returns((Todo?)null);
     var todoService = new TodoService(_todoRepositoryMock.Object, _dateTimeProviderMock.Object);
 
     var result = todoService.GetTodo(Guid.NewGuid());
@@ -126,11 +126,11 @@ public class TodoServiceTests
       Id = id,
       Title = "Test Todo",
       IsComplete = false,
-      CreatedAt = fakeNow,
+      CreatedAt = DateTime.MinValue,
       LastModified = DateTime.MinValue,
     };
     var updateTodoDto = new UpdateTodoDto(id, expectedTitle, true);
-    var expected = new TodoDto(id, expectedTitle, true, fakeNow, fakeNow);
+    var expected = new TodoDto(id, expectedTitle, true, DateTime.MinValue, fakeNow);
     _todoRepositoryMock.Setup(x => x.FindById(id)).Returns(todoToUpdate);
     _dateTimeProviderMock.Setup(x => x.GetCurrent()).Returns(fakeNow);
     var todoService = new TodoService(_todoRepositoryMock.Object, _dateTimeProviderMock.Object);
