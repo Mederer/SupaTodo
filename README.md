@@ -2,7 +2,7 @@
 
 Simple REST API for managing a collection of todo items implemented using ASP.NET Core.
 
-I'm developing this as I learn C# and .NET
+I'm developing this as I learn C#, .NET, and the Domain Driven Design pattern.
 
 ## Running the application
 
