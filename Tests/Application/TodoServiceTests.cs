@@ -1,9 +1,11 @@
+using System.Runtime.CompilerServices;
 using Moq;
 using SupaTodo.Application.Dtos;
 using SupaTodo.Application.Interfaces;
 using SupaTodo.Application.Repositories;
 using SupaTodo.Application.Services;
 using SupaTodo.Domain.Entities;
+using Xunit.Abstractions;
 
 namespace SupaTodo.Tests.Application;
 
@@ -12,10 +14,14 @@ public class TodoServiceTests
   private readonly Mock<ITodoRepository> _todoRepositoryMock;
   private readonly Mock<IDateTimeProvider> _dateTimeProviderMock;
 
-  public TodoServiceTests()
+  private readonly ITestOutputHelper output;
+
+
+  public TodoServiceTests(ITestOutputHelper output)
   {
     _todoRepositoryMock = new Mock<ITodoRepository>();
     _dateTimeProviderMock = new Mock<IDateTimeProvider>();
+    this.output = output;
   }
 
   [Fact]
@@ -105,6 +111,43 @@ public class TodoServiceTests
     var todoService = new TodoService(_todoRepositoryMock.Object, _dateTimeProviderMock.Object);
 
     var result = todoService.GetTodo(Guid.NewGuid());
+
+    Assert.Null(result);
+  }
+
+  [Fact]
+  void UpdateTodo_UpdatesCorrectly_WhenTodoExists()
+  {
+    var fakeNow = DateTime.Now;
+    var id = Guid.NewGuid();
+    var expectedTitle = "Updated Title";
+    var todoToUpdate = new Todo()
+    {
+      Id = id,
+      Title = "Test Todo",
+      IsComplete = false,
+      CreatedAt = fakeNow,
+      LastModified = DateTime.MinValue,
+    };
+    var updateTodoDto = new UpdateTodoDto(id, expectedTitle, true);
+    var expected = new TodoDto(id, expectedTitle, true, fakeNow, fakeNow);
+    _todoRepositoryMock.Setup(x => x.FindById(id)).Returns(todoToUpdate);
+    _dateTimeProviderMock.Setup(x => x.GetCurrent()).Returns(fakeNow);
+    var todoService = new TodoService(_todoRepositoryMock.Object, _dateTimeProviderMock.Object);
+
+    var result = todoService.UpdateTodo(updateTodoDto);
+
+    Assert.Equivalent(expected, result);
+  }
+
+  [Fact]
+  void UpdateTodo_ReturnsNull_WhenTodoDoesNotExist()
+  {
+    _todoRepositoryMock.Setup(x => x.FindById(It.IsAny<Guid>())).Returns((Todo?)null);
+    var todoService = new TodoService(_todoRepositoryMock.Object, _dateTimeProviderMock.Object);
+    var updateTodoDto = new UpdateTodoDto(Guid.NewGuid(), "Test Todo", false);
+
+    var result = todoService.UpdateTodo(updateTodoDto);
 
     Assert.Null(result);
   }
