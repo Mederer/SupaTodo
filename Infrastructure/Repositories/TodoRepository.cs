@@ -25,16 +25,14 @@ public class TodoRepository : ITodoRepository
 
     public bool Delete(Guid id)
     {
-        var todo = _todoList.Find(todo => todo.Id == id);
-
-        if (todo is null)
-        {
-            return false;
-        }
-        else
+        if (_todoList.Find(todo => todo.Id == id) is Todo todo)
         {
             _todoList.Remove(todo);
             return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }

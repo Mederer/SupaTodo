@@ -44,4 +44,15 @@ public class TodosController : ControllerBase
 
     return wasDeleted ? NoContent() : NotFound();
   }
+
+  [HttpPut]
+  public IActionResult UpdateTodo(UpdateTodoRequest updateTodoRequest)
+  {
+    var updatedTodo = _todoService.UpdateTodo(new UpdateTodoDto(
+        updateTodoRequest.Id,
+        updateTodoRequest.Title,
+        updateTodoRequest.IsComplete));
+
+    return updatedTodo is not null ? Ok(updatedTodo) : NotFound();
+  }
 }
