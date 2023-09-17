@@ -1,0 +1,3 @@
+@id=cae18b29-b615-4076-bab2-66eafae7801b
+
+DELETE http://localhost:5111/todos/cae18b29-b615-4076-bab2-66eafae7801b
