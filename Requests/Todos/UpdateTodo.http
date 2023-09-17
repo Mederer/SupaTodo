@@ -1,0 +1,10 @@
+@id=fabed109-684f-4bd4-a5a3-30a1f74f02d5
+
+PUT http://localhost:5111/todos
+Content-Type: application/json
+
+{
+  "id": "{{id}}",
+  "title": "Eat some scrambled eggs with cheese",
+  "isComplete": true
+}
