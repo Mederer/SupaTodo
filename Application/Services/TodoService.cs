@@ -66,7 +66,7 @@ public class TodoService : ITodoService
         {
             todo.Title = updateTodoDto.Title;
             todo.IsComplete = updateTodoDto.IsComplete;
-            todo.LastModified = DateTime.Now;
+            todo.LastModified = _dateTimeProvider.GetCurrent();
 
             return new TodoDto(
                 todo.Id,

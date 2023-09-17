@@ -9,9 +9,9 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/SupaTodo/bin/Debug/net7.0/SupaTodo.dll",
+      "program": "${workspaceFolder}/Presentation/bin/Debug/net7.0/Presentation.dll",
       "args": [],
-      "cwd": "${workspaceFolder}/SupaTodo",
+      "cwd": "${workspaceFolder}/Presentation",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
