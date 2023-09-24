@@ -27,4 +27,9 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Application\Todos\" />
+  </ItemGroup>
+
 </Project>

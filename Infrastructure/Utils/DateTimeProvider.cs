@@ -4,8 +4,8 @@ namespace SupaTodo.Infrastructure;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-  public DateTime GetCurrent()
-  {
-    return DateTime.UtcNow;
-  }
+    public DateTime UtcNow()
+    {
+        return DateTime.UtcNow;
+    }
 }
