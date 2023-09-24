@@ -12,12 +12,10 @@ namespace SupaTodo.Presentation.Controllers;
 [Route("[controller]")]
 public class TodosController : ControllerBase
 {
-    private readonly ITodoService _todoService;
     private readonly ISender _mediator;
 
-    public TodosController(ITodoService todoService, ISender mediator)
+    public TodosController(ISender mediator)
     {
-        _todoService = todoService;
         _mediator = mediator;
     }
 
@@ -26,15 +24,17 @@ public class TodosController : ControllerBase
     {
         var query = new GetTodosQuery();
         var todos = await _mediator.Send(query);
+        
         return Ok(todos);
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetTodo(Guid id)
+    public async Task<IActionResult> GetTodo(Guid id)
     {
-        var todo = _todoService.GetTodo(id);
+        var query = new GetTodoByIdQuery(id);
+        var todo = await _mediator.Send(query);
 
-        return todo is null ? NotFound() : Ok(todo);
+        return todo is not null ? Ok(todo) : NotFound();
     }
 
     [HttpPost]
@@ -54,12 +54,9 @@ public class TodosController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult UpdateTodo(UpdateTodoRequest updateTodoRequest)
+    public async Task<IActionResult> UpdateTodo(UpdateTodoCommand command)
     {
-        var updatedTodo = _todoService.UpdateTodo(new UpdateTodoDto(
-            updateTodoRequest.Id,
-            updateTodoRequest.Title,
-            updateTodoRequest.IsComplete));
+        var updatedTodo = await _mediator.Send(command);
 
         return updatedTodo is not null ? Ok(updatedTodo) : NotFound();
     }

@@ -19,7 +19,17 @@ public class TodoRepository : ITodoRepository
 
     public Todo Save(Todo todo)
     {
-        _todoList.Add(todo);
+        var todoToUpdate = _todoList.Find(x => x.Id == todo.Id);
+
+        if (todoToUpdate is null)
+        {
+            _todoList.Add(todo);
+        }
+        else
+        {
+            todoToUpdate = todo;
+        }
+        
         return todo;
     }
 
