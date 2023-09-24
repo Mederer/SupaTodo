@@ -12,9 +12,6 @@
 
 
 
-  <ItemGroup>
-    <Folder Include="Todos\Commands\" />
-  </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
