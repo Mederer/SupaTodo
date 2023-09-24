@@ -1,10 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SupaTodo.Application.Dtos;
-using SupaTodo.Application.Interfaces;
 using SupaTodo.Application.Todos.Commands;
 using SupaTodo.Application.Todos.Queries;
-using SupaTodo.Presentation.Contracts;
 
 namespace SupaTodo.Presentation.Controllers;
 

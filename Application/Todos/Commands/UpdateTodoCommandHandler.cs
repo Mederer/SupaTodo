@@ -28,7 +28,7 @@ public class UpdateTodoCommandHandler : IRequestHandler<UpdateTodoCommand, TodoD
 
         todo.Title = request.Title;
         todo.IsComplete = request.IsComplete;
-        todo.LastModified = _dateTimeProvider.GetCurrent();
+        todo.LastModified = _dateTimeProvider.UtcNow();
 
         _todoRepository.Save(todo);
 

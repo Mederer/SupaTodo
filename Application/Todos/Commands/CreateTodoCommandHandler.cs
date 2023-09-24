@@ -24,8 +24,8 @@ public class CreateTodoCommandHandler : IRequestHandler<CreateTodoCommand, TodoD
         {
             Id = Guid.NewGuid(),
             Title = request.Title,
-            CreatedAt = _dateTimeProvider.GetCurrent(),
-            LastModified = _dateTimeProvider.GetCurrent(),
+            CreatedAt = _dateTimeProvider.UtcNow(),
+            LastModified = _dateTimeProvider.UtcNow(),
             IsComplete = false
         };
         _todoRepository.Save(newTodo);
