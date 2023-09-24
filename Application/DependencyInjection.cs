@@ -14,6 +14,7 @@ public static class DependencyInjection
     TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
     
     services.AddScoped<ITodoService, TodoService>();
+    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
     return services;
   }
 }

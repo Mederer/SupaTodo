@@ -1,6 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SupaTodo.Application.Dtos;
 using SupaTodo.Application.Interfaces;
+using SupaTodo.Application.Todos.Queries;
 using SupaTodo.Presentation.Contracts;
 
 namespace SupaTodo.Presentation.Controllers;
@@ -10,15 +12,19 @@ namespace SupaTodo.Presentation.Controllers;
 public class TodosController : ControllerBase
 {
   private readonly ITodoService _todoService;
+  private readonly ISender _mediator;
 
-  public TodosController(ITodoService todoService)
+  public TodosController(ITodoService todoService, ISender mediator)
   {
     _todoService = todoService;
+    _mediator = mediator;
   }
 
   [HttpGet]
-  public IActionResult GetAllTodos()
+  public async Task<IActionResult> GetAllTodos()
   {
+    var query = new GetTodosQuery();
+    var todos = await _mediator.Send(query);
     return Ok(_todoService.GetAllTodos());
   }
 
