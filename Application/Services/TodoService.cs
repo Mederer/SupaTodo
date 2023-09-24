@@ -1,3 +1,4 @@
+using Mapster;
 using SupaTodo.Application.Dtos;
 using SupaTodo.Application.Repositories;
 using SupaTodo.Application.Interfaces;
@@ -28,7 +29,7 @@ public class TodoService : ITodoService
         };
         _todoRepository.Save(todo);
 
-        return new TodoDto(todo.Id, todo.Title, todo.IsComplete, todo.CreatedAt, todo.LastModified);
+        return todo.Adapt<TodoDto>();
     }
 
     public bool DeleteTodo(Guid id)
@@ -38,26 +39,15 @@ public class TodoService : ITodoService
 
     public List<TodoDto> GetAllTodos()
     {
-        return _todoRepository.FindAll().ConvertAll(todo => new TodoDto(
-            todo.Id,
-            todo.Title,
-            todo.IsComplete,
-            todo.CreatedAt,
-            todo.LastModified));
+        var todos = _todoRepository.FindAll();
+        return todos.Adapt<List<TodoDto>>();
     }
 
     public TodoDto? GetTodo(Guid id)
     {
-        if (_todoRepository.FindById(id) is Todo todo)
-        {
-            return new TodoDto(
-                id,
-                todo.Title,
-                todo.IsComplete,
-                todo.CreatedAt,
-                todo.LastModified);
-        }
-        return null;
+        var todo = _todoRepository.FindById(id);
+
+        return todo?.Adapt<TodoDto>();
     }
 
     public TodoDto? UpdateTodo(UpdateTodoDto updateTodoDto)
@@ -68,12 +58,7 @@ public class TodoService : ITodoService
             todo.IsComplete = updateTodoDto.IsComplete;
             todo.LastModified = _dateTimeProvider.GetCurrent();
 
-            return new TodoDto(
-                todo.Id,
-                todo.Title,
-                todo.IsComplete,
-                todo.CreatedAt,
-                todo.LastModified);
+            return todo.Adapt<TodoDto>();
         }
         else
         {
