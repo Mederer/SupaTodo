@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using SupaTodo.Application;
 using SupaTodo.Infrastructure;
+using SupaTodo.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration["Database:ConnectionString"];
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -11,6 +14,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
+builder.Services.AddDbContext<SupaTodoContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 var app = builder.Build();
 

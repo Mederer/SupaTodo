@@ -8,7 +8,7 @@ namespace Tests.Application.Commands.Handlers;
 public class CreateTodoCommandHandlerTests
 {
     [Fact]
-    void Handle_CreatesTodo_WithValidCommand()
+    private void Handle_CreatesTodo_WithValidCommand()
     {
         var mockTodoRepository = new Mock<ITodoRepository>();
         var mockDateTimeProvider = new Mock<IDateTimeProvider>();
